@@ -21,8 +21,8 @@ class PostRepository:
         return posts
     
 
-    def find(self, post_id):
+    def find_by_tag(self, tag):
         rows = self._connection.execute(
-            'SELECT * from posts WHERE post_id = %s', [post_id])
+            'SELECT posts.id, posts.title, posts.content FROM tags JOIN posts_tags ON posts_tags.tag_id = tags.id JOIN posts ON posts_tags.post_id = posts.id WHERE tags.tag_name = %s',[tag])
         row = rows[0]
-        return Post(row["title"], row["content"], row["post_id"])
+        return Post(row["id"],row["title"], row["content"])
